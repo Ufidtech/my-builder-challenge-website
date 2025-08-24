@@ -72,6 +72,7 @@
     </form>
 </section>
 <!-- END CONTACT FORM SECTION -->
+<canvas id="cosmic"></canvas>
     </main>
 
     <footer>
@@ -138,7 +139,61 @@
             messageDiv.style.display = 'none';
         }, 10000);
     }
+  (function() {
+    const canvas = document.getElementById('cosmic');
+    const ctx = canvas.getContext('2d');
+    let width, height, cx, cy, time = 0;
+    const particles = [];
+
+    // Resize handling
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      cx = width / 2;
+      cy = height / 2;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Create particles
+    const count = 120;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        dist: Math.random() * Math.min(cx, cy) * 0.9 + 20,
+        angle: Math.random() * Math.PI * 2,
+        speed: (Math.random() * 0.0008 + 0.0002),
+        size: Math.random() * 2 + 0.5
+      });
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Fade out for trailing effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+      ctx.fillRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.angle += p.speed;
+        const x = cx + Math.cos(p.angle) * p.dist;
+        const y = cy + Math.sin(p.angle) * p.dist;
+
+        // Color cycles with time and distance
+        const hue = (time * 20 + p.dist * 0.2) % 360;
+        ctx.fillStyle = `hsl(${hue}, 70%, 60%)`;
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      time += 0.005;
+    }
+
+    animate();
+  })();
 </script>
+
 </body>
 
 </html>
