@@ -379,6 +379,17 @@ footer {
     resize: vertical;
     min-height: 120px;
 }
+/* Fullscreen canvas behind all content */
+#cosmic {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  display: block;
+  background: #000;
+}
 
 /* Contact form submit button */
 .contact-submit-btn {
